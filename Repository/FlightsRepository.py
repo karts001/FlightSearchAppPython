@@ -2,6 +2,7 @@ from typing import List
 
 from motor.motor_asyncio import AsyncIOMotorClient
 
+from app.Models.Domain.FlightSearchResponse import FlightOffer
 from app.Repository.IFlightsRepository import IFlightsRepository
 
 
@@ -48,9 +49,18 @@ class FlightRepository(IFlightsRepository):
         print(collectionNames)
         return collectionNames
     
-    async def get_all_flights_deserialized():
-        pass
+    async def get_all_flights_deserialized(self, collection_name: str) -> List[FlightOffer]:
+        collection = self.database.get_collection(collection_name)
+        flights = await collection.find({}).to_list()
 
-    async def create_new_collection():
+        if not flights:
+            return []
+        
+        return [FlightOffer(**flight) for flight in flights]
+        
+
+        
+
+    async def create_new_collection(self):
         pass
                 

@@ -18,7 +18,6 @@ class Traveler(BaseModel):
     id: int
     traveler_type: str = Field(alias="travelerType")
 
-
 class CabinRestrictions(BaseModel):
     cabin: Optional[str] = None
     coverage: Optional[str] = None
@@ -35,8 +34,8 @@ class FlightFilters(BaseModel):
 
 
 class SearchCriteria(BaseModel):
-    max_flight_offers: int = Field(alias="maxFlightOffers")
-    flight_filters: FlightFilters = Field(alias="flightFilters")
+    max_flight_offers: int = Field(alias="maxFlightOffers", default=None)
+    flight_filters: FlightFilters = Field(alias="flightFilters", default=None)
 
 
 class FlightSearchRequest(BaseModel):

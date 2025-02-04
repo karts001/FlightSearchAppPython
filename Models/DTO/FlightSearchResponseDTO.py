@@ -46,7 +46,6 @@ class ItineraryDTO(BaseModel):
     duration: str
     segments: List[SegmentDTO]
 
-
 class FlightOfferDTO(BaseModel):
     id: int
     number_of_bookable_seats: int = Field(alias="numberOfBookableSeats")

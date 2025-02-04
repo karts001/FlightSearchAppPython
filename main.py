@@ -1,10 +1,10 @@
 from fastapi import FastAPI
 
-from app.Routers.Flights import flight_router
+from app.Routers.Flights import flights
 
 
 app = FastAPI()
-app.include_router(flight_router)
+app.include_router(flights)
 
 @app.get("/")
 async def root():

@@ -4,9 +4,9 @@ from typing import List, Optional
 from pydantic import Field, BaseModel, field_validator
 
 
-class IncludedCheckedBagsDTO(BaseModel):
+class IncludedCheckedBags(BaseModel):
     weight: int
-    weight_unit: str = Field(alias="weightUnit", default="kg")
+    weight_unit: str = Field(default="kg")
     quantity: Optional[int] = None
 
     @field_validator("weight")
@@ -15,20 +15,20 @@ class IncludedCheckedBagsDTO(BaseModel):
             raise ValueError("Positive weights only")
         return value
 
-class FareDetailsBySegmentDTO(BaseModel):
-    include_checked_bags: IncludedCheckedBagsDTO = Field(alias="includeCheckedBags")
+class FareDetailsBySegment(BaseModel):
+    include_checked_bags: Optional[IncludedCheckedBags] = Field(default=None)
 
-class TravelerPricingSummaryDTO(BaseModel):
-    traveler_id: int = Field(alias="travelerId")
-    fare_details_by_segment: List[FareDetailsBySegmentDTO] = Field(alias="fareDetailsBySegment")
+class TravelerPricingSummary(BaseModel):
+    traveler_id: int
+    fare_details_by_segment: List[FareDetailsBySegment]
 
-class PriceDTO(BaseModel):
+class Price(BaseModel):
     currency: str
     total: str
-    grand_total: float = Field(alias="grandTotal")
+    grand_total: float
 
 class PricingOptions(BaseModel):
-    included_checked_bags_only: bool = Field(alias="includedCheckedBagsOnly")
+    included_checked_bags_only: bool
 
 class FlightInfo(BaseModel):
     iata_code: str
@@ -51,11 +51,11 @@ class FlightOffer(BaseModel):
     number_of_bookable_seats: int
     source: str
     itineraries: List[Itinerary]
-    price: PriceDTO
+    price: Price
     pricing_options: PricingOptions
-    travel_pricings: List[TravelerPricingSummaryDTO]
+    travel_pricings: List[TravelerPricingSummary]
     validation_airline_codes: List[str]
-    score: float
+    score: Optional[float] = None
 
 class FlightSearchResponse(BaseModel):
-    flights: List[FlightOffer] = Field(alias="data")
+    flights: List[FlightOffer]
