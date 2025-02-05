@@ -55,7 +55,7 @@ class FlightOffer(BaseModel):
     pricing_options: PricingOptions
     travel_pricings: List[TravelerPricingSummary]
     validation_airline_codes: List[str]
-    score: Optional[float] = None
+    score: Optional[float] = Field(default=0.0)
 
 class FlightSearchResponse(BaseModel):
     flights: List[FlightOffer]
