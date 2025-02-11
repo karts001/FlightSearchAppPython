@@ -1,16 +1,10 @@
-from app.Models.Domain.FlightSearchResponse import FlightOffer
 from app.Utilities import Conversions
 
+    
+def calculate_score(price_weighting: float, converter: Conversions, price: float, duration: str):
+    if price_weighting > 1 or price_weighting < 0:
+        raise ValueError("Weighting value msut be between 0 and 1")
+    duration_weighting = 1 - price_weighting
+    duration_minutes = converter.convert_iso_time_to_minutes(duration)
 
-class Calculations:
-    def __init__(self, price_weighting: float, converter: Conversions):
-        self.price_weighting = price_weighting
-        self.duration_weighting = 1 - self.price_weighting
-        self._converter = converter
-
-    def calculate_score(self, flight_offer: FlightOffer) -> float:
-        price = flight_offer.price.grand_total
-        normalised_price = 1 / price
-        normalised_duration = self._converter.convert_iso_time_to_minutes(flight_offer.itineraries[0].duration)
-
-        return (normalised_price * self.price_weighting) + (normalised_duration * self.duration_weighting)
+    return (price_weighting / price ) + (duration_weighting / duration_minutes)

@@ -12,12 +12,14 @@ class Conversions:
 
         
         if "" in time:
-            hours = time[0]
+            hours = int(time[0])
             
-            return int(hours)   
+            minutes = int(hours * 60)
+            return minutes
         else:
-            hours = time[0]
-            minutes = time[1]
+            hours = int(time[0])
+            minutes = int(time[1])
 
-            return (int(hours) * 60) + (int(minutes))
+            minutes = (hours) * 60 + minutes
+            return minutes
         

@@ -9,7 +9,7 @@ from app.Models.Domain.FlightSearchResponse import FlightOffer
 from app.Repository.FlightsRepository import FlightRepository
 from app.Services.Amadeus import Amadeus
 from app.Services.TokenService import TokenService
-from app.Utilities.Calculations import Calculations
+from app.Utilities.Calculations import calculate_score
 from app.Utilities.Conversions import Conversions
 
 load_dotenv()
@@ -52,7 +52,9 @@ async def compare(flights: List[FlightOffer], collection_name: str = "") -> List
     combined_flights: List[FlightOffer] = db_flights + flights
 
     for flight in combined_flights:
-        flight.score = Calculations(converter=_converter, price_weighting=0.5).calculate_score(flight)
+        price = flight.price.grand_total
+        duration = flight.itineraries[0].duration
+        flight.score = calculate_score(price_weighting=0.5, converter=_converter, price=price, duration=duration)
 
     # return the top 5 results
     return sorted(combined_flights, key=lambda x: x.score, reverse=True)[:5]
